@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>BMI Result</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static',
+filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>BMI Analysis</h2>
+
+<h1>{{ bmi }}</h1>
+
+{% if bmi < 18.5 %}
+<h3>Underweight</h3>
+
+{% elif bmi < 25 %}
+<h3>Normal Weight</h3>
+
+{% elif bmi < 30 %}
+<h3>Overweight</h3>
+
+{% else %}
+<h3>Obese</h3>
+
+{% endif %}
+
+<br>
+
+<a href="/dashboard" class="btn">
+Go Dashboard
+</a>
+
+</div>
+
+</body>
+</html>

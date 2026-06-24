@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Nutrition Analytics</title>
+<link rel="stylesheet"
+href="{{ url_for('static',filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Nutrition Analytics Dashboard</h2>
+
+<div class="cards">
+
+<div class="card">
+<h3>Total Calories</h3>
+<h1>{{ total_calories }}</h1>
+</div>
+
+<div class="card">
+<h3>Water Intake</h3>
+<h1>{{ total_water }} Glasses</h1>
+</div>
+
+<div class="card">
+<h3>Current Weight</h3>
+<h1>{{ latest_weight }} kg</h1>
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

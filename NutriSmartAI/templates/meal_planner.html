@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Meal Planner</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+.container { max-width: 800px; margin: auto; padding: 30px; }
+.profile-summary {
+    background: rgba(56, 189, 248, 0.05);
+    border-radius: 16px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(56, 189, 248, 0.1);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+}
+.profile-summary .item { color: #94A3B8; font-size: 14px; }
+.profile-summary .item strong { color: #E2E8F0; }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1 style="text-align:center; color:#38BDF8;">🍽 AI Meal Planner</h1>
+    
+    <div class="profile-summary">
+        <div class="item"><strong>Lifestyle:</strong> {{ lifestyle }}</div>
+        <div class="item"><strong>Preference:</strong> {{ food_preference }}</div>
+        <div class="item"><strong>Activity:</strong> {{ activity_level }}</div>
+        <div class="item"><strong>Calories:</strong> {{ calories }}</div>
+    </div>
+
+    <div class="result-card">
+        <h3>🌅 Breakfast</h3>
+        <p>{{ breakfast }}</p>
+        <hr>
+        <h3>☀️ Lunch</h3>
+        <p>{{ lunch }}</p>
+        <hr>
+        <h3>🍿 Snacks</h3>
+        <p>{{ snacks }}</p>
+        <hr>
+        <h3>🌙 Dinner</h3>
+        <p>{{ dinner }}</p>
+        <hr>
+        <h3>💧 Water Intake</h3>
+        <p>{{ water }}</p>
+        <hr>
+        <h3>🏃 Exercise</h3>
+        <p>{{ exercise }}</p>
+        <hr>
+        <h3>🥩 Protein Sources</h3>
+        <p>{{ protein_sources }}</p>
+        <hr>
+        <h3>🚫 Foods To Avoid</h3>
+        <p>{{ foods_to_avoid }}</p>
+    </div>
+
+    <div style="text-align:center; margin-top:20px;">
+        <a href="/dashboard" class="btn">⬅ Back To Dashboard</a>
+    </div>
+</div>
+</body>
+</html>

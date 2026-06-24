@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Food Recommendations</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+.recommendation-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 30px;
+}
+.page-title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #38BDF8;
+}
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+.food-card {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 25px;
+    transition: 0.3s;
+}
+.food-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.food-card h3 {
+    color: #38BDF8;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+.food-card p {
+    color: #E2E8F0;
+    margin: 8px 0;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding: 4px 0;
+}
+.food-card .label {
+    color: #94A3B8;
+    font-weight: 500;
+}
+.food-card .value {
+    color: #38BDF8;
+    font-weight: 600;
+}
+.food-card .meal-badge {
+    display: inline-block;
+    background: linear-gradient(90deg, #06B6D4, #8B5CF6);
+    padding: 4px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    margin-top: 10px;
+}
+.no-data {
+    text-align: center;
+    padding: 40px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 20px;
+}
+.back-btn {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #06B6D4, #7C3AED);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+}
+.center { text-align: center; }
+</style>
+</head>
+<body>
+<div class="recommendation-container">
+    <h1 class="page-title">🍽 AI Recommended Foods</h1>
+    <h3 style="text-align:center; color:#94A3B8;">Total Foods Found: {{ foods|length }}</h3>
+
+    {% if foods and foods|length > 0 %}
+    <div class="food-grid">
+        {% for food in foods %}
+        <div class="food-card">
+            <h3>{{ food.food_name }}</h3>
+            <p><span class="label">🔥 Calories</span> <span class="value">{{ food.calories or 0 }} kcal</span></p>
+            <p><span class="label">💪 Protein</span> <span class="value">{{ food.protein or 0 }} g</span></p>
+            <p><span class="label">🍞 Carbs</span> <span class="value">{{ food.carbs or 0 }} g</span></p>
+            <p><span class="label">🧈 Fat</span> <span class="value">{{ food.fat or 0 }} g</span></p>
+            <p><span class="label">🌾 Fiber</span> <span class="value">{{ food.fiber or 0 }} g</span></p>
+            <p><span class="label">📂 Category</span> <span class="value">{{ food.food_category or 'N/A' }}</span></p>
+            <p><span class="label">🩺 Disease</span> <span class="value">{{ food.suitable_disease or 'All' }}</span></p>
+            <p><span class="label">📍 Region</span> <span class="value">{{ food.region or 'Global' }}</span></p>
+            {% if food.meal_type %}
+            <span class="meal-badge">{{ food.meal_type }}</span>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-data">
+        <h2>No Recommendations Available</h2>
+        <p>Please add foods in the admin panel or contact your administrator.</p>
+    </div>
+    {% endif %}
+
+    <div class="center">
+        <a href="/dashboard" class="back-btn">⬅ Back To Dashboard</a>
+    </div>
+</div>
+</body>
+</html>

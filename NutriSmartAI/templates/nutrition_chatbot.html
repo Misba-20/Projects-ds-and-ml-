@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Nutrition Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .chatbot-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .chatbot-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .chatbot-header h1 {
+            font-size: 36px;
+            background: linear-gradient(135deg, #38BDF8, #8B5CF6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+        
+        .chatbot-header p {
+            color: #94A3B8;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        
+        .chatbot-card {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 35px;
+        }
+        
+        .chatbot-card .input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 5px;
+        }
+        
+        .chatbot-card .input-group input {
+            flex: 1;
+            padding: 14px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.06);
+            color: #E2E8F0;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot-card .input-group input:focus {
+            border-color: #38BDF8;
+            background: rgba(255, 255, 255, 0.10);
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.08);
+        }
+        
+        .chatbot-card .input-group input::placeholder {
+            color: #64748B;
+        }
+        
+        .chatbot-card .input-group .btn-ask {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #06B6D4, #8B5CF6);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .chatbot-card .input-group .btn-ask:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.3);
+        }
+        
+        .chatbot-hint {
+            color: #64748B;
+            font-size: 13px;
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .chatbot-hint .hint-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            color: #94A3B8;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .chatbot-hint .hint-tag:hover {
+            background: rgba(56, 189, 248, 0.1);
+            color: #38BDF8;
+            border-color: rgba(56, 189, 248, 0.2);
+        }
+        
+        /* Answer Section */
+        .answer-section {
+            margin-top: 25px;
+            animation: fadeInUp 0.5s ease;
+        }
+        
+        .answer-card {
+            background: rgba(56, 189, 248, 0.05);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            border-radius: 16px;
+            padding: 25px;
+        }
+        
+        .answer-card .answer-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .answer-card .answer-header .ai-icon {
+            font-size: 24px;
+        }
+        
+        .answer-card .answer-header h3 {
+            color: #38BDF8;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .answer-card .answer-content {
+            color: #E2E8F0;
+            font-size: 16px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+        
+        .answer-card .answer-content strong {
+            color: #38BDF8;
+        }
+        
+        /* Question display */
+        .question-display {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 12px 18px;
+            margin-bottom: 15px;
+            border-left: 3px solid #8B5CF6;
+        }
+        
+        .question-display .q-label {
+            color: #64748B;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .question-display .q-text {
+            color: #CBD5E1;
+            font-size: 15px;
+            margin-top: 2px;
+        }
+        
+        /* Back button */
+        .back-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 14px 35px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            background: linear-gradient(135deg, #8B5CF6, #06B6D4);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .empty-state .empty-icon {
+            font-size: 60px;
+            display: block;
+            margin-bottom: 15px;
+        }
+        
+        .empty-state h3 {
+            color: #94A3B8;
+            font-weight: 400;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .chatbot-card .input-group {
+                flex-direction: column;
+            }
+            
+            .chatbot-card .input-group .btn-ask {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .chatbot-card {
+                padding: 25px 20px;
+            }
+            
+            .chatbot-header h1 {
+                font-size: 28px;
+            }
+            
+            .chatbot-hint {
+                gap: 5px;
+            }
+            
+            .chatbot-hint .hint-tag {
+                font-size: 11px;
+                padding: 3px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="chatbot-container">
+    <!-- Header -->
+    <div class="chatbot-header">
+        <h1>🤖 AI Nutrition Assistant</h1>
+        <p>Ask any question about diet, nutrition, and health</p>
+    </div>
+
+    <!-- Chatbot Card -->
+    <div class="chatbot-card">
+        <form method="POST" action="/chatbot">
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    name="question" 
+                    placeholder="Ask nutrition question..." 
+                    value="{{ question if question else '' }}"
+                    required
+                >
+                <button type="submit" class="btn-ask">Ask AI 💬</button>
+            </div>
+        </form>
+
+        <!-- Quick Question Hints -->
+        <div class="chatbot-hint">
+            <span style="color:#64748B; font-weight:500;">Quick questions:</span>
+            <span class="hint-tag" onclick="setQuestion('What foods are good for diabetes?')">Diabetes</span>
+            <span class="hint-tag" onclick="setQuestion('How to lose weight fast?')">Weight Loss</span>
+            <span class="hint-tag" onclick="setQuestion('What are high protein foods?')">Protein</span>
+            <span class="hint-tag" onclick="setQuestion('What to eat for thyroid?')">Thyroid</span>
+            <span class="hint-tag" onclick="setQuestion('How much water should I drink?')">Water</span>
+            <span class="hint-tag" onclick="setQuestion('What foods are good for heart health?')">Heart Health</span>
+        </div>
+
+        <!-- Answer Section -->
+        {% if answer %}
+        <div class="answer-section">
+            <!-- Question Display -->
+            <div class="question-display">
+                <div class="q-label">📝 Your Question</div>
+                <div class="q-text">{{ question if question else '...' }}</div>
+            </div>
+
+            <!-- Answer Display -->
+            <div class="answer-card">
+                <div class="answer-header">
+                    <span class="ai-icon">🧠</span>
+                    <h3>AI Answer</h3>
+                </div>
+                <div class="answer-content">{{ answer|safe }}</div>
+            </div>
+        </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <span class="empty-icon">💬</span>
+            <h3>Ask me anything about nutrition!</h3>
+            <p style="color: #64748B; font-size: 14px; margin-top: 5px;">
+                Type your question above or click a quick question
+            </p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Back to Dashboard Button -->
+    <div class="back-section">
+        <a href="/dashboard" class="btn-back">⬅ Back to Dashboard</a>
+    </div>
+</div>
+
+<!-- JavaScript for Quick Questions -->
+<script>
+function setQuestion(text) {
+    document.querySelector('input[name="question"]').value = text;
+    // Optional: Auto-submit
+    // document.querySelector('form').submit();
+}
+</script>
+
+</body>
+</html>

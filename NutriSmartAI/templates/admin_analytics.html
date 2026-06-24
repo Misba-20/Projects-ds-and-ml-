@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Analytics | NutriSmart AI</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+.analytics-container { max-width: 1400px; margin: auto; padding: 30px; }
+.analytics-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.analytics-header h1 {
+    font-size: 32px;
+    background: linear-gradient(135deg, #8B5CF6, #38BDF8);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+.chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 25px;
+}
+.chart-card {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 24px;
+    padding: 25px;
+}
+.chart-card h3 { color: #8B5CF6; text-align: center; margin-bottom: 15px; }
+.chart-card img { width: 100%; height: auto; border-radius: 12px; }
+.chart-full { grid-column: 1 / -1; }
+.chart-half { grid-column: span 1; }
+.btn-back {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 14px;
+    color: white;
+    text-decoration: none;
+    background: linear-gradient(135deg, #8B5CF6, #06B6D4);
+}
+@media (max-width: 992px) {
+    .chart-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+    .chart-grid { grid-template-columns: 1fr; }
+    .chart-full { grid-column: 1; }
+    .chart-half { grid-column: 1; }
+}
+</style>
+</head>
+<body>
+<div class="analytics-container">
+    <div class="analytics-header">
+        <h1>📊 Admin Analytics</h1>
+        <a href="/admin-dashboard" class="btn-back">⬅ Back</a>
+    </div>
+    <div class="chart-grid">
+        <div class="chart-card">
+            <h3>📈 User Growth</h3>
+            {% if growth_chart %}
+                <img src="data:image/png;base64,{{ growth_chart }}" alt="User Growth">
+            {% else %}
+                <p style="color:#64748B; text-align:center;">No data</p>
+            {% endif %}
+        </div>
+        <div class="chart-card">
+            <h3>📊 Platform Stats</h3>
+            {% if stats_chart %}
+                <img src="data:image/png;base64,{{ stats_chart }}" alt="Platform Stats">
+            {% else %}
+                <p style="color:#64748B; text-align:center;">No data</p>
+            {% endif %}
+        </div>
+        <div class="chart-card">
+            <h3>🩺 Disease Distribution</h3>
+            {% if disease_chart %}
+                <img src="data:image/png;base64,{{ disease_chart }}" alt="Disease Distribution">
+            {% else %}
+                <p style="color:#64748B; text-align:center;">No data</p>
+            {% endif %}
+        </div>
+        <div class="chart-card">
+            <h3>🎯 Goal Distribution</h3>
+            {% if goal_chart %}
+                <img src="data:image/png;base64,{{ goal_chart }}" alt="Goal Distribution">
+            {% else %}
+                <p style="color:#64748B; text-align:center;">No data</p>
+            {% endif %}
+        </div>
+        <div class="chart-card">
+            <h3>🏃 Activity Distribution</h3>
+            {% if activity_chart %}
+                <img src="data:image/png;base64,{{ activity_chart }}" alt="Activity Distribution">
+            {% else %}
+                <p style="color:#64748B; text-align:center;">No data</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>
